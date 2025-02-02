@@ -1,3 +1,7 @@
+:root {
+    --padding-calculadora: 15px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -18,7 +22,11 @@
     left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 15px;
-    padding: 15px;
+    padding: var(--padding-calculadora);
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .botao {
@@ -36,13 +44,17 @@
     background-color: black;
 }
 
+.potencia {
+    font-size: 50%;
+    margin-left: 2px;
+}
+
 #resultado {
-    width: 207px;
+    width: calc(100% - var(--padding-calculadora) - 6px);
+    text-align: center;
     background-color: white;
     height: 30px;
-    margin: 5px;
     font-size: 25px;
     color: black;
-    text-align: right;
     padding: 5px;
 }
