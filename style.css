@@ -1,5 +1,6 @@
 :root {
     --padding-calculadora: 15px;
+    --hover-color: black;
 }
 
 * {
@@ -40,8 +41,12 @@
     margin: 3px;
 }
 
+.potencia-ativa {
+    background-color: var(--hover-color);
+}
+
 .botao:hover {
-    background-color: black;
+    background-color: var(--hover-color);
 }
 
 .potencia {
