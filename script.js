@@ -10,6 +10,9 @@ function insertNumberInSubscript(num) {
 
 function insert(num)
 {
+    if (resultado.innerHTML === 'ERROR') {
+	resultado.innerHTML = '';
+    }
     if (modoSuperscriptAtivado === true) {
 	switch (num) {
 	case '*':
@@ -20,7 +23,7 @@ function insert(num)
 	    var numero = resultado.innerHTML;
 	    resultado.innerHTML = numero + num;
 
-	    alternaModoSuperscript(false);
+	    alternaModoSuperscript(false, false);
 
 	    distanciaDeOperadoresEspeciais.push({
 		distancia: 1,
@@ -52,9 +55,9 @@ function insert(num)
     }
 }
 
-function alternaModoSuperscript(criaSupElement)
+function alternaModoSuperscript(criaSupElement, novoValor)
 {
-    modoSuperscriptAtivado = !modoSuperscriptAtivado;
+    modoSuperscriptAtivado = novoValor;
 
     if (criaSupElement === true) {
 	let superscript = document.createElement('sup');
@@ -72,7 +75,7 @@ function clean ()
 {
     resultado.innerHTML = "";
     distanciaDeOperadoresEspeciais = [];
-    modoSuperscriptAtivado = false;
+    alternaModoSuperscript(false, false);
 }
 
 function removeNumeroDoSuperscript()
@@ -87,7 +90,7 @@ function removeNumeroDoSuperscript()
 	}
     }
 
-    alternaModoSuperscript(false);
+    alternaModoSuperscript(false, false);
     distanciaDeOperadoresEspeciais.shift();
     resultado.innerHTML = resultado.innerHTML.substring(0, resultado.innerHTML.length - "<sup></sup>".length);
 }
@@ -103,7 +106,7 @@ function back ()
 		distanciaDeOperadoresEspeciais.shift();
 		break;
 	    case 'POW':
-		alternaModoSuperscript(false);
+		alternaModoSuperscript(false, true);
 
 		removeNumeroDoSuperscript();
 		break;
@@ -127,10 +130,10 @@ function calcular ()
     let regex = /<sup>(\d+)<\/sup>/
     let resultadoDoMatch;
 
-    modoSuperscriptAtivado = false;
+    alternaModoSuperscript(false, false);
     
     do {
-	resultadoDoMatch = regex.exec(resultado);
+	resultadoDoMatch = regex.exec(resultadoDoCalculo);
 
 	if (resultadoDoMatch !== null && resultadoDoMatch.length === 2) {
 	    resultadoDoCalculo = resultadoDoCalculo.replace(/<sup>\d+<\/sup>/, '**' + resultadoDoMatch[1]);
@@ -141,7 +144,13 @@ function calcular ()
     if(resultadoDoCalculo) 
     {
 	resultadoDoCalculo = resultadoDoCalculo.replaceAll('MOD', '%');
-        resultado.innerHTML = eval(resultadoDoCalculo);
+	console.log(resultadoDoCalculo);
+	try {
+	    resultado.innerHTML = eval(resultadoDoCalculo);
+	} catch {
+	    resultado.innerHTML = 'ERROR';
+	}
+
     }
 
     distanciaDeOperadoresEspeciais = [];
